@@ -24,7 +24,8 @@ class Login extends Component{
         const {history} = this.props;  //pindah halaman react router
         const res = await this.props.loginAPI({email, password}).catch(err => err);
         if(res) {
-            console.log('Login success', res);
+            // console.log('Login success', res);
+            localStorage.setItem('userData', JSON.stringify(res)) //menyimpan user ke local storages
             this.setState({
                 email:'',
                 password: ''

@@ -1,4 +1,4 @@
-import firebase from '../../firebase'
+import firebase, {database} from '../../firebase'
 
 export const actionUserName = () => (dispatch) => { 
     setTimeout(() => {
@@ -57,7 +57,57 @@ export const loginUserAPI = (data) => (dispatch) => {
             reject(false)            
         })
     }) 
+}
 
+export const addDataToAPI = (data) => (dispatch) => {
+    database.ref('notes/' + data.userId).push({ //notes sebagai endpoint
+        title: data.title,
+        content: data.content,
+        date: data.date
+    })
+}
 
-   
+export const getDataFromAPI = (userId) => (dispatch) => {
+    const urlNotes = database.ref('notes/' + userId);
+    return new Promise((resolve, reject)=> {
+        urlNotes.on('value', function(snapshot) {
+            console.log('get data: ',snapshot.val());
+
+            const data = [];
+
+            Object.keys(snapshot.val()).map(key => {
+                data.push({
+                    id: key,
+                    data: snapshot.val()[key]
+                })
+            }); //membuat object menjadi array
+            
+            dispatch({type: 'SET_NOTES', value: data })
+            resolve(snapshot.val())
+        });
+
+    })
+}
+export const updateDataAPI = (data) => (dispatch) => {
+    const urlNotes = database.ref(`notes/${data.userId}/${data.noteId}`);
+    return new Promise((resolve, reject)=> {
+        urlNotes.set({ //notes sebagai endpoint
+            title: data.title,
+            content: data.content,
+            date: data.date
+        }, (err) => {
+            if(err){
+                reject(false);
+            } else {
+                resolve(true)
+            }
+        });
+
+    })
+}
+export const deleteDataAPI = (data) => (dispatch) => {
+    const urlNotes = database.ref(`notes/${data.userId}/${data.noteId}`);
+    return new Promise((resolve, reject)=> {
+        urlNotes.remove();
+    })
 }
