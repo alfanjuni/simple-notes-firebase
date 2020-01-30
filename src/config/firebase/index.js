@@ -1,9 +1,9 @@
 import firebase from 'firebase/app';
 import 'firebase/auth';
-// import 'firebase/firestore';
+import 'firebase/database';
 
 
-var firebaseConfig = {
+const firebaseConfig = {
     apiKey: "AIzaSyBfFemE5-l6iZZS5OLynCWgz1EVl6P3kY0",
     authDomain: "simple-notes-firebase-29fbd.firebaseapp.com",
     databaseURL: "https://simple-notes-firebase-29fbd.firebaseio.com",
@@ -14,7 +14,9 @@ var firebaseConfig = {
     measurementId: "G-11Q9J0RZYC"
   };
   // Initialize Firebase
-  firebase.initializeApp(firebaseConfig);
+firebase.initializeApp(firebaseConfig);
 //   firebase.analytics();
 
-  export default firebase;
+export const database = firebase.database();
+
+export default firebase;
